@@ -1,6 +1,11 @@
 {
-  "name": "simple-forum",
+  "name": "cloud-guhexiang",
   "version": "1.0.0",
+  "description": "自用CloudLink联机+TurboWarp简易论坛后端",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
     "express": "^4.18.2"
   }
