@@ -1,4 +1,15 @@
-const port = process.env.PORT || 3000;
-app.listen(port, "0.0.0.0", () => {
-  console.log(`服务启动成功，端口：${port}`);
-});
+{
+  "name": "cloud-guhexiang",
+  "version": "1.0.0",
+  "description": "互通留言论坛后端服务",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
