@@ -1,12 +1,4 @@
-{
-  "name": "cloud-guhexiang",
-  "version": "1.0.0",
-  "description": "自用CloudLink联机+TurboWarp简易论坛后端",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.18.2"
-  }
-}
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`服务启动成功，端口：${port}`);
+});
