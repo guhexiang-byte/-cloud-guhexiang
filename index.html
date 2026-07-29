@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>简易论坛留言板</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 10px;
+            font-family: "微软雅黑", sans-serif;
+        }
+        body {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .box {
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 8px 22px;
+            background: #2E7DFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .post-item {
+            border-bottom: 1px solid #eee;
+            padding: 12px 0;
+        }
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #222;
+        }
+        .info {
+            font-size: 13px;
+            color: #666;
+            margin: 4px 0;
+        }
+        .content {
+            margin-top: 6px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <h2>论坛留言板</h2>
+
+    <div class="box">
+        <h3>发布新帖子</h3>
+        <input type="text" id="author" placeholder="输入你的昵称">
+        <input type="text" id="title" placeholder="输入帖子标题">
+        <textarea id="content" rows="3" placeholder="输入帖子内容"></textarea>
+        <button onclick="submitPost()">提交发帖</button>
+    </div>
+
+    <div id="postList"></div>
+
+    <script>
+        const baseUrl = "http://localhost:3000";
+        window.onload = getPostList;
+
+        async function getPostList() {
+            try {
+                const res = await fetch(`${baseUrl}/api/posts`);
+                const posts = await res.json();
+                const listBox = document.getElementById("postList");
+                listBox.innerHTML = "";
+                posts.forEach(item => {
+                    listBox.innerHTML += `
+                        <div class="post-item">
+                            <div class="title">${item.title}</div>
+                            <div class="info">作者：${item.author} | 发布时间：${item.createTime}</div>
+                            <div class="content">${item.content}</div>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                document.getElementById("postList").innerHTML = "加载失败，请检查后端服务是否启动";
+            }
+        }
+
+        async function submitPost() {
+            const author = document.getElementById("author").value.trim();
+            const title = document.getElementById("title").value.trim();
+            const content = document.getElementById("content").value.trim();
+            if (!author || !title || !content) {
+                alert("昵称、标题、内容均不能为空");
+                return;
+            }
+            const params = new URLSearchParams();
+            params.append("author", author);
+            params.append("title", title);
+            params.append("content", content);
+            await fetch(`${baseUrl}/api/newpost`, {
+                method: "POST",
+                body: params,
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+                }
+            });
+            document.getElementById("author").value = "";
+            document.getElementById("title").value = "";
+            document.getElementById("content").value = "";
+            getPostList();
+            alert("发帖成功");
+        }
+    </script>
+</body>
+</html>
